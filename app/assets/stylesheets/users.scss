@@ -5,10 +5,24 @@
   text-align: center;
 }
 
+.btn-arrow-left {
+  margin-right: 20px;
+}
+
+.btn-arrow-right {
+  margin-left: 20px;
+}
+
+// 申請のお知らせボタン
+
+.request-notice a {
+  color: black;
+}
+
 /* ユーザー情報下ボタン */
 
 .btn-users-show {
-  margin-top: -10px;
+  margin-top: 10px;
   margin-bottom: 10px;
 }
 
@@ -18,11 +32,11 @@
   margin-top: 20px;
   
   th {
-    vertical-align: middle;
+    vertical-align: bottom;
     text-align: center;
   }
   td {
-    vertical-align: middle;
+    vertical-align: bottom;
     text-align: center;
   }
 }
