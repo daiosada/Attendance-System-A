@@ -19,6 +19,19 @@
   color: black;
 }
 
+// ファイル選択 & CSVインポート
+
+.select-file {
+  position: relative;
+  z-index: 2;
+}
+
+.filename {
+  margin-left: -5px;
+  position: relative;
+  z-index: 1;
+}
+
 /* ユーザー情報下ボタン */
 
 .btn-users-show {
@@ -59,13 +72,7 @@
   margin-top: 10px;
 }
 
-/* ユーザー一覧ページ */
-
-#table-users {
-  td {
-    vertical-align: middle;
-  }  
-}
+// 土日の色を変更
 
 .saturday {
   color: blue;
@@ -73,4 +80,41 @@
 
 .sunday {
   color: red;
+}
+
+/* ユーザー一覧ページ */
+
+#table-users {
+  td {
+    border: 0px none;
+    vertical-align: middle;
+  }  
+}
+
+.user-name a {
+  color: black;
+}
+
+.csv-select {
+  display: inline-block;
+}
+
+.btn-csv-import {
+  margin-top: 15px;
+}
+
+.user-delete {
+  margin-top: 10px;
+  text_align: center;
+}
+
+.user-edit {
+  background-color: #eee;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.btn-edit {
+  padding: 15px 30px;
 }
