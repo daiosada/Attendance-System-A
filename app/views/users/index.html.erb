@@ -5,9 +5,11 @@
   <%= form_with(url: import_users_path, multipart: true, method: :post) do |f| %>
     <div class="form-inline">
       <div class="form-group">
-        <%= f.submit "ファイルを選択", class: "form-control-file select-file" %>
-        <%= f.text_field :filename, readonly: true, class: "filename" %>
-        <%= f.file_field :file, style: "display: none" %>
+        <%= f.submit "ファイルを選択", type: "button", 
+            onclick: "$('#file-import').click();", class: "form-control-file select-file" %>
+        <%= f.text_field :filename, disabled: true, id: "filename" %>
+        <%= f.file_field :file, style: "display: none",
+            onchange: "file_selected($(this))", id: "file-import" %>
         <%= f.submit "CSVをインポート", class: "btn btn-primary btn-block btn-csv-import" %>
       </div>
     </div>
@@ -30,7 +32,7 @@
                   data: { confirm: "削除してよろしいですか？" }, class: "btn btn-primary" %>
             </div>
             <div class="user-edit">
-              <%= link_to "編集", '#', class: "btn btn-primary btn-edit" %>
+              <%= link_to "編集", edit_user_path(user), class: "btn btn-primary btn-edit" %>
             </div>
           <% end %>
         </td>
@@ -39,3 +41,10 @@
   </table>
   <%= will_paginate %>
 </div>
+
+<script type="text/javascript">
+  function file_selected(file_field){
+    var filename = $(file_field)[0].files[0].name;
+    $("#filename").val(filename);
+  }
+</script>

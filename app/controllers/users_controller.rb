@@ -47,6 +47,16 @@ class UsersController < ApplicationController
     redirect_to users_url
   end
   
+  def import
+    if User.import(params[:file])
+      flash[:success] = "ユーザを追加しました。"
+      redirect_to users_url
+    else
+      flash[:success] = "ユーザを追加に失敗しました。"
+      redirect_to users_url
+    end
+  end
+  
   def edit_basic_info
   end
   
