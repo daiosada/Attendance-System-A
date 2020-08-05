@@ -2,13 +2,13 @@
 <h1>ユーザ一覧</h1>
 
 <div class="col-md-4 col-md-offset-1">
-  <%= form_with(url: import_users_path, multipart: true, method: :post) do |f| %>
+  <%= form_with url: import_users_path do |f| %>
     <div class="form-inline">
       <div class="form-group">
         <%= f.submit "ファイルを選択", type: "button", 
             onclick: "$('#file-import').click();", class: "form-control-file select-file" %>
         <%= f.text_field :filename, disabled: true, id: "filename" %>
-        <%= f.file_field :file, style: "display: none",
+        <%= f.file_field :file, style: "display: none", accept: '.csv',
             onchange: "file_selected($(this))", id: "file-import" %>
         <%= f.submit "CSVをインポート", class: "btn btn-primary btn-block btn-csv-import" %>
       </div>

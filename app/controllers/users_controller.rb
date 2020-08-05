@@ -52,7 +52,7 @@ class UsersController < ApplicationController
       flash[:success] = "ユーザを追加しました。"
       redirect_to users_url
     else
-      flash[:success] = "ユーザを追加に失敗しました。"
+      flash[:danger] = "ユーザの追加に失敗しました。"
       redirect_to users_url
     end
   end
