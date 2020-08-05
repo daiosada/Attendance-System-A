@@ -108,13 +108,23 @@
   text_align: center;
 }
 
-.user-edit {
-  background-color: #eee;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  padding: 10px;
+.panel-heading {
+  background-color: #f5f5f5;
+  border-color: #ddd;
 }
 
 .btn-edit {
   padding: 15px 30px;
+}
+
+.panel-collapse {
+  padding: 15px;
+}
+
+.label-user--edit {
+  margin-top: 10px;
+}
+
+.btn-user--edit {
+  margin-top: 15px;
 }
