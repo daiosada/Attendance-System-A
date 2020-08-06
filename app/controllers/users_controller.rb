@@ -73,6 +73,10 @@ class UsersController < ApplicationController
     redirect_to edit_basic_info_user_url
   end
   
+  def show_employees_at_work
+    @attendances = Attendance.where(worked_on: Date.current).where.not(started_at: nil).where(finished_at: nil)
+  end
+  
   private
   
     def user_params

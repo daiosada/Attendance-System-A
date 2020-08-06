@@ -1,0 +1,22 @@
+<% provide(:title, "Employees") %>
+<h1>出勤中社員一覧</h1>
+
+<div class="col-md-10 col-md-offset-1">
+  <table class="table table-bordered table-striped table-hover employees-table">
+    <thead>
+      <tr>
+        <th>社員番号</th>
+        <th>名前</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @attendances.each do |attendance| %>
+        <% user = User.find(attendance.user_id) %>
+          <tr>
+            <td><%= user.employee_number %></td>
+            <td><%= user.name %></td>
+          </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     resources :attendances, only: :update
     collection do
       post :import
+      get 'show_employees_at_work'
     end
   end
 end
