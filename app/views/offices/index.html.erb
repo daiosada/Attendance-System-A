@@ -1,0 +1,32 @@
+<% provide(:title, "All Users") %>
+<h1>拠点一覧</h1>
+
+<div class="col-md-10 col-md-offset-1">
+  <table class="table table-bordered table-striped table-hover offices-table">
+    <thead>
+      <tr>
+        <th></th>
+        <th></th>
+        <th>拠点番号</th>
+        <th>拠点名</th>
+        <th>勤怠種類</th>
+      </tr>
+    </thead>
+    
+    <tbody>
+      <% @offices.each do |office| %>
+        <tr>
+          <td><%= link_to "修正", '#', class: "btn btn-primary btn-edit-office" %></td>
+          <td><%= link_to "削除", '#', class: "btn btn-primary" %></td>
+          <td><%= office.id %></td>
+          <td><%= office.name %></td>
+          <td><%= office.attendance %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  
+  <div class="add-office">
+    <%= link_to "拠点情報追加", '#', class: "btn btn-primary btn-add-office" %>
+  </div>
+</div>

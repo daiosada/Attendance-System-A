@@ -19,4 +19,6 @@ Rails.application.routes.draw do
       get 'show_employees_at_work'
     end
   end
+  
+  resources :offices
 end
