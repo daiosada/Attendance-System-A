@@ -1,0 +1,14 @@
+<%= form_with(model: @office, local: true) do |f| %>
+  <%= render 'error_messages', object: @office %>
+  
+  <%= f.label :office_id, class: "label-#{yield(:class_text)}" %>
+  <%= f.number_field :office_id, class: "form-control" %>
+  
+  <%= f.label :name, class: "label-#{yield(:class_text)}" %>
+  <%= f.text_field :name, class: "form-control" %>
+  
+  <%= f.label :attendance, class: "label-#{yield(:class_text)}" %>
+  <%= f.select :attendance, {"出勤": "出勤", "退勤": "退勤"}, {}, class: "form-control" %>
+  
+  <%= f.submit yield(:button_text), class: "btn btn-primary btn-block btn-#{yield(:class_text)}" %>
+<% end %>

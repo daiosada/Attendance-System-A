@@ -1,3 +1,5 @@
+// 拠点一覧
+
 .offices-table {
   th {
     text-align: center;
@@ -24,4 +26,24 @@
 
 .btn-add-office {
   padding: 10px 20px;
+}
+
+// 拠点情報編集
+
+.label-office--edit {
+  margin-top: 10px;
+}
+
+.btn-office--edit {
+  margin-top: 15px;
+}
+
+// 拠点情報追加
+
+.label-office--add {
+  margin-top: 10px;
+}
+
+.btn-office--add {
+  margin-top: 15px;
 }
