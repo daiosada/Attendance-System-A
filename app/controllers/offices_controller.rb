@@ -6,11 +6,12 @@ class OfficesController < ApplicationController
   end
   
   def new
-    # num = 1
-    max = Office.maximum(:office_id)
-    # @offices.each do |office|
-    # end
-    @office = Office.new(office_id: max + 1)
+    empty_num = 1
+    @offices.each do |office|
+      break if empty_num < office.office_id
+      empty_num += 1
+    end
+    @office = Office.new(office_id: empty_num)
   end
   
   def create
@@ -36,6 +37,9 @@ class OfficesController < ApplicationController
   end
   
   def destroy
+    @office.destroy
+    flash[:success] = "#{@office.name}の情報を削除しました。"
+    redirect_to offices_url
   end
   
   private
