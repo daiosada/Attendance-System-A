@@ -13,11 +13,12 @@ Rails.application.routes.draw do
       get 'attendances/edit_one_month'
       patch 'attendances/update_one_month'
     end
-    resources :attendances, only: :update
     collection do
       post :import
       get 'show_employees_at_work'
     end
+    resources :attendances, only: :update
+    resources :one_month_attendances, only: :update
   end
   
   resources :offices

@@ -55,4 +55,9 @@ class ApplicationController < ActionController::Base
     flash[:danger] = "ページ情報の取得に失敗しました。再アクセスしてくだい。"
     redirect_to root_url
   end
+  
+  def set_one_month_attendance
+    @one_month_attendance = @user.one_month_attendances.find_by(month: @first_day)
+    @one_month_attendance = @user.one_month_attendances.create(month: @first_day) if @one_month_attendance.blank?
+  end
 end

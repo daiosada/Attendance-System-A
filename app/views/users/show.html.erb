@@ -126,8 +126,20 @@
         <td colspan="5"></td>
         <td>
           <% if !current_user.admin? %>
-            <% @superiors.each do |superior| %>
-              <%= superior.name %>
+            <%= form_with(model: [@user, @one_month_attendance], local: true) do |f| %>
+              所属長承認
+              <span class="one-month-attendance-status">
+                <%= case @one_month_attendance.status
+                    when "なし" then "未"
+                    when "申請中" then User.find(@one_month_attendance.approver).name + "へ申請中"
+                    when "承認" then User.find(@one_month_attendance.approver).name + "から承認済"
+                    when "否認" then User.find(@one_month_attendance.approver).name + "から否認済"
+                    end %>
+              </span>
+              <% unless @one_month_attendance.status == "申請中" %>
+                <%= f.collection_select :approver, @superiors, :id, :name, { include_blank: ""}, class: "form-control" %>
+                <%= f.submit "申請", class: "btn btn-primary btn-block" %>
+              <% end %>
             <% end %>
           <% end %>
         </td>

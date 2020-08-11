@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200809074852) do
+ActiveRecord::Schema.define(version: 20200810094548) do
 
   create_table "attendances", force: :cascade do |t|
     t.date "worked_on"
@@ -31,6 +31,16 @@ ActiveRecord::Schema.define(version: 20200809074852) do
     t.integer "office_id"
   end
 
+  create_table "one_month_attendances", force: :cascade do |t|
+    t.date "month"
+    t.string "status", default: "なし"
+    t.integer "approver"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_one_month_attendances_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -40,9 +50,9 @@ ActiveRecord::Schema.define(version: 20200809074852) do
     t.boolean "admin", default: false
     t.string "remember_digest"
     t.boolean "superior", default: false
-    t.datetime "basic_work_time", default: "2020-07-28 23:00:00"
-    t.datetime "designated_work_start_time", default: "2020-07-29 00:00:00"
-    t.datetime "designated_work_end_time", default: "2020-07-29 09:00:00"
+    t.datetime "basic_work_time", default: "2020-08-10 23:00:00"
+    t.datetime "designated_work_start_time", default: "2020-08-11 00:00:00"
+    t.datetime "designated_work_end_time", default: "2020-08-11 09:00:00"
     t.string "affiliation"
     t.integer "employee_number"
     t.string "uid"
