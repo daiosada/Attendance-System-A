@@ -27,10 +27,21 @@
 </div>
 
 <% if current_user.superior? %>
-  <div class="request-notice">
-    <%= link_to "【所属長承認申請のお知らせ】", '#', class: "btn-superior-approval" %><br>
-    <%= link_to "【勤怠変更申請のお知らせ】", '#', class: "btn-attendance-update" %><br>
-    <%= link_to "【残業申請のお知らせ】", '#', class: "btn-overtime-work" %>
+  <% if !@one_month_attendances.blank? %>
+    <div class="request-exist">
+      <%= link_to "【所属長承認申請のお知らせ】", one_month_attendances_show_one_month_attendances_user_path(@user), remote: true %>
+      <span class="number-of-notice"><%= @one_month_attendances.count %>件の通知があります</span>
+    </div>
+  <% else %>
+    <div class="no-request">
+      <%= link_to "【所属長承認申請のお知らせ】", one_month_attendances_show_one_month_attendances_user_path(@user), disabled: true %>
+    </div>
+  <% end %>
+  <div class="no-request">
+    <%= link_to "【勤怠変更申請のお知らせ】", '#', disabled: true %>
+  </div>
+  <div class="no-request">
+    <%= link_to "【残業申請のお知らせ】", '#', disabled: true %>
   </div>
 <% end %>
 
@@ -147,3 +158,5 @@
     </tfoot>
   </table>
 </div>
+
+<div id="show-one-month-attendances" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>

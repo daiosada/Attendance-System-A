@@ -15,8 +15,22 @@
 
 // 申請のお知らせボタン
 
-.request-notice a {
+.request-exist a {
+  color: red;
+}
+
+.no-request a {
   color: black;
+}
+
+.number-of-notice {
+  border: 3px solid red;
+  color: red;
+  font-weight: bold;
+}
+
+.no-border {
+  border: none;
 }
 
 // ファイル選択 & CSVインポート

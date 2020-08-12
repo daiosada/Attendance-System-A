@@ -1,4 +1,6 @@
 class OneMonthAttendancesController < ApplicationController
+  before_action :set_user, only: :show_one_month_attendances
+  before_action :set_one_month_attendances, only: :show_one_month_attendances
   
   def update
     @user = User.find(params[:user_id])
@@ -14,6 +16,12 @@ class OneMonthAttendancesController < ApplicationController
       end
     end
     redirect_to @user
+  end
+  
+  def show_one_month_attendances
+  end
+  
+  def approve_one_month_attendances
   end
   
   private

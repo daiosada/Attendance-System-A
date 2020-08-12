@@ -60,4 +60,10 @@ class ApplicationController < ActionController::Base
     @one_month_attendance = @user.one_month_attendances.find_by(month: @first_day)
     @one_month_attendance = @user.one_month_attendances.create(month: @first_day) if @one_month_attendance.blank?
   end
+  
+  def set_one_month_attendances
+    if @user.superior?
+      @one_month_attendances = OneMonthAttendance.where(approver: @user.id)
+    end
+  end
 end
