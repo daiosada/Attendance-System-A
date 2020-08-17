@@ -63,7 +63,7 @@ class ApplicationController < ActionController::Base
   
   def set_one_month_attendances
     if @user.superior?
-      @one_month_attendances = OneMonthAttendance.where(approver: @user.id)
+      @one_month_attendances = OneMonthAttendance.where(approver: @user.id).where(status: "申請中")
     end
   end
 end

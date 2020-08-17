@@ -6,9 +6,8 @@
       </buttn>
     </div>
     <div class="modal-body">
-      <div class="row">
-        <div class="col-md-12 col-md-offset-0">
-          <%= form_with(model: @user, url: one_month_attendances_approve_one_month_attendances_user_path(@user), local: true) %> 
+      <div class="approve-one-month-attendances">
+        <%= form_with(model: @user, url: one_month_attendances_approve_one_month_attendances_user_path(@user), local: true) do |f| %> 
           <% @one_month_attendances.select(:user_id).distinct.each do |user| %>
             <% user_id = user.user_id %>
             <h4>【<%= User.find(user_id).name %>から1ヶ月分勤怠申請】</h4>
@@ -23,17 +22,20 @@
               </thead>
               <tbody>
                 <% @one_month_attendances.where(user_id: user_id).each do |one_month_attendance| %>
+                  <%= fields_for "one_month_attendances[]", one_month_attendance do |form| %>
                   <tr>
                     <td><%= one_month_attendance.month.month %>月</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td><%= form.select :status, @statuses, { selected: one_month_attendance.status }, class: "form-control" %></td>
+                    <td><%= form.check_box :checked %></td>
+                    <td><%= link_to "確認", "#", class: "btn btn-primary" %></td>
                   </tr>
+                  <% end %>
                 <% end %>
               </tbody>
             </table>
           <% end %>
-        </div>
+          <%= f.submit "変更を送信する", class: "btn btn-primary btn-approve-one-month-attendances" %>
+        <% end %>
       </div>
     </div>
   </div>
