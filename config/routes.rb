@@ -13,7 +13,9 @@ Rails.application.routes.draw do
       get 'attendances/edit_one_month'
       patch 'attendances/update_one_month'
       get 'one_month_attendances/show_one_month_attendances'
+      get 'one_month_attendances/show_one_month_attendance'
       patch 'one_month_attendances/approve_one_month_attendances'
+      get 'one_month_attendances/confirm_one_month_attendance'
     end
     collection do
       post :import

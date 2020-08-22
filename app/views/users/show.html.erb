@@ -1,11 +1,13 @@
 <% provide(:title, @user.name) %>
+<% approver?(@approver) ? provide(:class_text, "default disabled") : provide(:class_text, "primary") %>
+
 <div>
   <table class="table table-bordered table-condensed user-table">
     <tr>
       <td>
-        <%= link_to "←︎︎", user_path(date: @first_day.prev_month), class: "btn btn-primary btn-arrow-left" %>
-        <%= l(@first_day, format: :middle) %>　時間管理表
-        <%= link_to "→︎︎︎", user_path(date: @first_day.next_month), class: "btn btn-primary btn-arrow-right" %>
+        <%= link_to "←", user_path(date: @first_day.prev_month), class: "btn btn-#{yield(:class_text)} btn-arrow-left" %>
+        <%= l(@first_day, format: :middle) %><span>時間管理表</span>
+        <%= link_to "→", user_path(date: @first_day.next_month), class: "btn btn-#{yield(:class_text)} btn-arrow-right" %>
       </td>
       <td>
         指定勤務開始時間　<%= format_basic_info(@user.designated_work_start_time) %><br>
@@ -33,22 +35,24 @@
       <span class="number-of-notice"><%= @one_month_attendances.count %>件の通知があります</span>
     </div>
   <% else %>
-    <div class="no-request">
-      <%= link_to "【所属長承認申請のお知らせ】", '#', disabled: true %>
+    <div>
+      <span>【所属長承認申請のお知らせ】</span>
+      <%= link_to "1ヶ月分勤怠の承認", one_month_attendances_show_one_month_attendance_user_path(@user, date: @first_day),
+          remote: true, class: "btn btn-primary" %>
     </div>
   <% end %>
-  <div class="no-request">
-    <%= link_to "【勤怠変更申請のお知らせ】", '#', disabled: true %>
+  <div>
+    <span>【勤怠変更申請のお知らせ】</span>
   </div>
-  <div class="no-request">
-    <%= link_to "【残業申請のお知らせ】", '#', disabled: true %>
+  <div>
+    <span>【残業申請のお知らせ】</span>
   </div>
 <% end %>
 
 <div class="btn-users-show">
-  <%= link_to "勤怠を編集", attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-primary" %>
-  <%= link_to "CSV出力", '#', class: "btn btn-primary" %><br>
-  <%= link_to "勤怠修正ログ（承認済）", '#', class: "btn btn-primary" %>
+  <%= link_to "勤怠を編集", attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-#{yield(:class_text)}" %>
+  <%= link_to "CSV出力", '#', class: "btn btn-#{yield(:class_text)}" %><br>
+  <%= link_to "勤怠修正ログ（承認済）", '#', class: "btn btn-#{yield(:class_text)}" %>
 </div>
 
 <div>
@@ -92,7 +96,7 @@
                 'sunday'
               end %>
         <tr>
-          <td><%= link_to "残業申請", '#', class: "btn btn-primary" %></td>
+          <td><%= link_to "残業申請", '#', class: "btn btn-#{yield(:class_text)}" %></td>
           <td><%= l(day.worked_on, format: :short) %></td>
           <td class="<%= weekend %>"><%= $days_of_the_week[day.worked_on.wday] %></td>
           <td><%= day.started_at.hour if day.started_at.present? %></td>
@@ -100,7 +104,7 @@
           <td>
             <% if btn_text = attendance_state(day) %>
               <% if btn_text == '出勤' %>
-                <%= link_to btn_text, user_attendance_path(@user, day), method: :patch, class: "btn btn-primary btn-attendances" %>
+                <%= link_to btn_text, user_attendance_path(@user, day), method: :patch, class: "btn btn-#{yield(:class_text)} btn-attendances" %>
               <% end %>
             <% end %>
           </td>
@@ -109,7 +113,7 @@
           <td>
             <% if btn_text = attendance_state(day) %>
               <% if btn_text == '退勤' %>
-                <%= link_to btn_text, user_attendance_path(@user, day), method: :patch, class: "btn btn-primary btn-attendances" %>
+                <%= link_to btn_text, user_attendance_path(@user, day), method: :patch, class: "btn btn-#{yield(:class_text)} btn-attendances" %>
               <% end %>
             <% end %>
           </td>
@@ -160,3 +164,4 @@
 </div>
 
 <div id="show-one-month-attendances" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+<div id="show-one-month-attendance" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>

@@ -7,9 +7,8 @@
     </div>
     <div class="modal-body">
       <div class="approve-one-month-attendances">
-        <%= form_with(model: @user, url: one_month_attendances_approve_one_month_attendances_user_path(@user), local: true) do |f| %> 
-          <% @one_month_attendances.select(:user_id).distinct.order(:user_id).each do |user| %>
-            <% user_id = user.user_id %>
+        <%= form_with(model: @user, url: one_month_attendances_approve_one_month_attendances_user_path(@user), local: true) do |f| %>
+          <% user_id = @one_month_attendance.user_id %>
             <h4>【<%= User.find(user_id).name %>から1ヶ月分勤怠申請】</h4>
             <table class="table table-bordered table-striped table-hover">
               <thead>
@@ -17,23 +16,18 @@
                   <th>月</th>
                   <th>指示者確認㊞</th>
                   <th>変更</th>
-                  <th>勤怠を確認する</th>
                 </tr>
               </thead>
               <tbody>
-                <% @one_month_attendances.where(user_id: user_id).order(:month).each do |one_month_attendance| %>
-                  <%= fields_for "one_month_attendances[]", one_month_attendance do |form| %>
+                  <%= fields_for "one_month_attendances[]", @one_month_attendance do |form| %>
                   <tr>
-                    <td><%= one_month_attendance.month.month %>月</td>
-                    <td><%= form.select :status, @statuses, { selected: one_month_attendance.status }, class: "form-control" %></td>
+                    <td><%= @one_month_attendance.month.month %>月</td>
+                    <td><%= form.select :status, @statuses, { selected: @one_month_attendance.status }, class: "form-control" %></td>
                     <td><%= form.check_box :checked %></td>
-                    <td><%= link_to "確認", user_path(id: user_id, date: one_month_attendance.month), class: "btn btn-primary" %></td>
                   </tr>
                   <% end %>
-                <% end %>
               </tbody>
             </table>
-          <% end %>
           <%= f.submit "変更を送信する", class: "btn btn-primary btn-approve-one-month-attendances" %>
         <% end %>
       </div>

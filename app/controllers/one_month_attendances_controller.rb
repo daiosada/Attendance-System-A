@@ -1,7 +1,9 @@
 class OneMonthAttendancesController < ApplicationController
-  before_action :set_user, only: [:show_one_month_attendances, :approve_one_month_attendances]
+  before_action :set_user, only: [:show_one_month_attendances, :show_one_month_attendance, :approve_one_month_attendances]
+  before_action :set_one_month, only: [:show_one_month_attendance]
   before_action :set_one_month_attendances, only: :show_one_month_attendances
-  before_action :set_statuses, only: :show_one_month_attendances
+  before_action :set_one_month_attendance, only: :show_one_month_attendance
+  before_action :set_statuses, only: [:show_one_month_attendances, :show_one_month_attendance]
   
   def update
     @user = User.find(params[:user_id])
@@ -22,6 +24,9 @@ class OneMonthAttendancesController < ApplicationController
   def show_one_month_attendances
   end
   
+  def show_one_month_attendance
+  end
+  
   def approve_one_month_attendances
     ActiveRecord::Base.transaction do
       one_month_attendances_params.each do |id, item|
@@ -32,10 +37,10 @@ class OneMonthAttendancesController < ApplicationController
       end
     end
     flash[:success] = "1ヶ月分勤怠申請を承認しました。"
-    redirect_to @user
+    redirect_to current_user
   rescue ActiveRecord::RecordInvalid
     flash[:danger] = "承認に失敗しました。やり直してください。"
-    redirect_to @user
+    redirect_to current_user
   end
   
   private

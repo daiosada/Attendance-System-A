@@ -41,6 +41,10 @@ module SessionsHelper
     !current_user.nil?
   end
   
+  def approver?(approver)
+    approver.nil? ? false : approver == current_user
+  end
+  
   def redirect_back_or(default_url)
     redirect_to(session[:forwarding_url] || default_url)
     session.delete(:forwarding_url)
