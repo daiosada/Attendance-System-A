@@ -8,4 +8,12 @@ module ApplicationHelper
       page_name + " | " + base_title
     end
   end
+  
+  def weekend(day)
+    if day.worked_on.saturday?
+      'saturday'
+    elsif day.worked_on.sunday?
+      'sunday'
+    end
+  end
 end

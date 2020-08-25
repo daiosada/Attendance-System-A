@@ -48,11 +48,4 @@ class OneMonthAttendancesController < ApplicationController
     def one_month_attendances_params
       params.permit(one_month_attendances: [:status, :checked])[:one_month_attendances]
     end
-    
-    def set_statuses
-      @statuses = {"なし": "なし",
-                   "申請中": "申請中",
-                   "承認": "承認",
-                   "否認": "否認"}
-    end
 end

@@ -28,6 +28,14 @@ class ApplicationController < ActionController::Base
     redirect_to root_url unless current_user.admin?
   end
   
+  def admin_or_correct_user
+    @user = User.find(params[:id]) if @user.blank?
+    unless current_user?(@user) || current_user.admin?
+      flash[:danger] = "編集権限がありません。"
+      redirect_to(root_url)
+    end
+  end
+  
   def admin_or_correct_user_or_approver
     @user = User.find(params[:id]) if @user.blank?
     @approver = User.find(@one_month_attendance.approver) unless @one_month_attendance.approver.nil?
@@ -66,5 +74,17 @@ class ApplicationController < ActionController::Base
     if @user.superior?
       @one_month_attendances = OneMonthAttendance.where(approver: @user.id).where(status: "申請中")
     end
+  end
+    
+  def set_statuses
+    @statuses = {"なし": "なし",
+                 "申請中": "申請中",
+                 "承認": "承認",
+                 "否認": "否認"}
+  end
+  
+  def set_overtime
+    @overtime = Overtime.find_by(worked_on: params[:date], user_id: params[:id])
+    @overtime = Overtime.create(worked_on: params[:date], user_id: params[:id]) if @overtime.blank?
   end
 end
