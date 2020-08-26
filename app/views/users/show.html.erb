@@ -44,9 +44,16 @@
   <div>
     <span>【勤怠変更申請のお知らせ】</span>
   </div>
-  <div>
-    <span>【残業申請のお知らせ】</span>
-  </div>
+  <% if @overtimes.blank? %>
+    <div>
+      <span>【残業申請のお知らせ】</span>
+    </div>
+  <% else %>
+    <div class="request-exist">
+      <%= link_to "【残業申請のお知らせ】", overtimes_show_overtimes_user_path(@user), remote: true %>
+      <span class="number-of-notice"><%= @overtimes.count %>件の通知があります</span>
+    </div>
+  <% end %>
 <% end %>
 
 <div class="btn-users-show">
@@ -162,3 +169,4 @@
 <div id="show-one-month-attendances" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
 <div id="show-one-month-attendance" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
 <div id="show-overtime" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+<div id="show-overtimes" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>

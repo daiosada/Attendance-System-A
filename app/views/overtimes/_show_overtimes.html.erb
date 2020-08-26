@@ -1,0 +1,42 @@
+<div class="modal-dialog modal-lg modal-dialog-center">
+  <div class="modal-content">
+    <div class="modal-header no-border">
+      <buttn type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </buttn>
+    </div>
+    <div class="modal-body">
+      <div class="approve-one-month-attendances">
+        <%= form_with(model: @user, url: overtimes_approve_overtimes_user_path(@user), local: true) do |f| %> 
+          <% @overtimes.select(:user_id).distinct.order(:user_id).each do |user| %>
+            <% user_id = user.user_id %>
+            <h4>【<%= User.find(user_id).name %>から残業申請】</h4>
+            <table class="table table-bordered table-striped table-hover">
+              <thead>
+                <tr>
+                  <th>月</th>
+                  <th>指示者確認㊞</th>
+                  <th>変更</th>
+                  <th>勤怠を確認する</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @overtimes.where(user_id: user_id).order(:worked_on).each do |overtime| %>
+                  <%= fields_for "overtimes[]", overtime do |form| %>
+                  <tr>
+                    <td><%= l(overtime.worked_on, format: :short) %></td>
+                    <td><%= form.select :status, @statuses, { selected: overtime.status }, class: "form-control" %></td>
+                    <td></td>
+                    <td><%= link_to "確認", user_path(id: user_id, date: overtime.worked_on), class: "btn btn-primary" %></td>
+                  </tr>
+                  <% end %>
+                <% end %>
+              </tbody>
+            </table>
+          <% end %>
+          <%= f.submit "変更を送信する", class: "btn btn-primary btn-approve-one-month-attendances" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

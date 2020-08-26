@@ -87,4 +87,10 @@ class ApplicationController < ActionController::Base
     @overtime = Overtime.find_by(worked_on: params[:date], user_id: params[:id])
     @overtime = Overtime.create(worked_on: params[:date], user_id: params[:id]) if @overtime.blank?
   end
+  
+  def set_overtimes
+    if @user.superior?
+      @overtimes = Overtime.where(approver: @user.id).where(status: "申請中")
+    end
+  end
 end

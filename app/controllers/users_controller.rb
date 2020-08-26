@@ -6,6 +6,7 @@ class UsersController < ApplicationController
   before_action :set_superiors, only: :show
   before_action :set_one_month_attendance, only: :show
   before_action :set_one_month_attendances, only: :show
+  before_action :set_overtimes, only: :show
   before_action :admin_or_correct_user_or_approver, only: [:show, :edit, :update]
   
   def index
@@ -14,6 +15,7 @@ class UsersController < ApplicationController
   
   def show
     @worked_sum = @attendances.where.not(started_at: nil).count
+    # debugger
   end
   
   def new
