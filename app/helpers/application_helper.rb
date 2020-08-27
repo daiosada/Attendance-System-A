@@ -10,9 +10,9 @@ module ApplicationHelper
   end
   
   def weekend(day)
-    if day.worked_on.saturday?
+    if day.saturday?
       'saturday'
-    elsif day.worked_on.sunday?
+    elsif day.sunday?
       'sunday'
     end
   end

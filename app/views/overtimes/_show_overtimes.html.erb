@@ -10,11 +10,17 @@
         <%= form_with(model: @user, url: overtimes_approve_overtimes_user_path(@user), local: true) do |f| %> 
           <% @overtimes.select(:user_id).distinct.order(:user_id).each do |user| %>
             <% user_id = user.user_id %>
-            <h4>【<%= User.find(user_id).name %>から残業申請】</h4>
+            <% applying_user = User.find(user_id) %>
+            <h4>【<%= applying_user.name %>から残業申請】</h4>
             <table class="table table-bordered table-striped table-hover">
               <thead>
                 <tr>
-                  <th>月</th>
+                  <th>日付</th>
+                  <th>曜日</th>
+                  <th>終了予定時間</th>
+                  <th>指定勤務終了時間</th>
+                  <th>時間外時間</th>
+                  <th>業務処理内容</th>
                   <th>指示者確認㊞</th>
                   <th>変更</th>
                   <th>勤怠を確認する</th>
@@ -24,7 +30,13 @@
                 <% @overtimes.where(user_id: user_id).order(:worked_on).each do |overtime| %>
                   <%= fields_for "overtimes[]", overtime do |form| %>
                   <tr>
-                    <td><%= l(overtime.worked_on, format: :short) %></td>
+                    <% day = overtime.worked_on %>
+                    <td><%= l(day, format: :short) %></td>
+                    <td class="<%= weekend(day) %>"><%= $days_of_the_week[day.wday] %></td>
+                    <td><%= format_will_finish(overtime) %></td>
+                    <td><%= format_basic_info(applying_user.designated_work_end_time) %></td>
+                    <td><%= calculate_overtime(overtime, applying_user.designated_work_end_time) %></td>
+                    <td><%= overtime.note %></td>
                     <td><%= form.select :status, @statuses, { selected: overtime.status }, class: "form-control" %></td>
                     <td></td>
                     <td><%= link_to "確認", user_path(id: user_id, date: overtime.worked_on), class: "btn btn-primary" %></td>

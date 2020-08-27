@@ -96,7 +96,7 @@
     
     <tbody>
       <% @attendances.each do |day| %>
-        <% weekend = weekend(day) %>
+        <% weekend = weekend(day.worked_on) %>
         <tr>
           <td><%= link_to "残業申請", overtimes_show_overtime_user_path(@user, date: day.worked_on),
                   remote: true, class: "btn btn-#{yield(:class_text)}" %></td>
