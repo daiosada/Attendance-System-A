@@ -33,10 +33,10 @@ class OneMonthAttendancesController < ApplicationController
         if item[:checked]
           one_month_attendance = OneMonthAttendance.find(id)
           one_month_attendance.update_attributes!(item)
+          flash[:success] = "1ヶ月分勤怠申請を承認しました。"
         end
       end
     end
-    flash[:success] = "1ヶ月分勤怠申請を承認しました。"
     redirect_to current_user
   rescue ActiveRecord::RecordInvalid
     flash[:danger] = "承認に失敗しました。やり直してください。"

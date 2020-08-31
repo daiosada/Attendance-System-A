@@ -29,16 +29,18 @@
 </div>
 
 <% if current_user.superior? %>
-  <% if !@one_month_attendances.blank? %>
+  <% if @one_month_attendances.blank? %>
+    <div>
+      <span>【所属長承認申請のお知らせ】</span>
+      <% if @one_month_attendance_approver == current_user %>
+        <%= link_to "1ヶ月分勤怠申請の承認", one_month_attendances_show_one_month_attendance_user_path(@user, date: @first_day),
+            remote: true, class: "btn btn-primary" %>
+      <% end %>
+    </div>
+  <% else %>
     <div class="request-exist">
       <%= link_to "【所属長承認申請のお知らせ】", one_month_attendances_show_one_month_attendances_user_path(@user), remote: true %>
       <span class="number-of-notice"><%= @one_month_attendances.count %>件の通知があります</span>
-    </div>
-  <% else %>
-    <div>
-      <span>【所属長承認申請のお知らせ】</span>
-      <%= link_to "1ヶ月分勤怠の承認", one_month_attendances_show_one_month_attendance_user_path(@user, date: @first_day),
-          remote: true, class: "btn btn-primary" %>
     </div>
   <% end %>
   <div>
@@ -47,6 +49,10 @@
   <% if @overtimes.blank? %>
     <div>
       <span>【残業申請のお知らせ】</span>
+      <% if @overtime_attendance_approver == current_user %>
+        <%= link_to "残業申請の承認", overtimes_approve_overtime_user_path(@user, date: @first_day),
+            remote: true, class: "btn btn-primary" %>
+      <% end %>
     </div>
   <% else %>
     <div class="request-exist">

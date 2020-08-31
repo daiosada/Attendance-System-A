@@ -68,6 +68,7 @@ class ApplicationController < ActionController::Base
   def set_one_month_attendance
     @one_month_attendance = @user.one_month_attendances.find_by(month: @first_day)
     @one_month_attendance = @user.one_month_attendances.create(month: @first_day) if @one_month_attendance.blank?
+    @one_month_attendance_approver = User.find(@one_month_attendance.approver) unless @one_month_attendance.approver.nil?
   end
   
   def set_one_month_attendances
@@ -86,6 +87,7 @@ class ApplicationController < ActionController::Base
   def set_overtime
     @overtime = Overtime.find_by(worked_on: params[:date], user_id: params[:id])
     @overtime = Overtime.create(worked_on: params[:date], user_id: params[:id]) if @overtime.blank?
+    @overtime_approver = User.find(@overtime.approver) unless @overtime.approver.nil?
   end
   
   def set_overtimes

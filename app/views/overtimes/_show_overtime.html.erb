@@ -21,18 +21,20 @@
               </tr>
             </thead>
             <tbody>
+              <%= fields_for "overtimes[]", @overtime do |form| %>
               <tr>
                 <td><%= l(@overtime.worked_on, format: :short) %></td>
-                <td class="<%= weekend(@overtime) %>"><%= $days_of_the_week[@overtime.worked_on.wday] %></td>
+                <td class="<%= weekend(@overtime.worked_on) %>"><%= $days_of_the_week[@overtime.worked_on.wday] %></td>
                 <td>
                   <div class="form-inline">
-                    <%= f.time_select :will_finish, { include_blank: ""}, class: "form-control" %>
+                    <%= form.time_select :will_finish, { include_blank: ""}, class: "form-control" %>
                   </div>
                 </td>
-                <td><%= f.check_box :next_day %></td>
-                <td><%= f.text_field :note, class: "form-control" %></td>
-                <td><%= f.collection_select :approver, @superiors, :id, :name, { include_blank: ""}, class: "form-control" %></td>
+                <td><%= form.check_box :next_day %></td>
+                <td><%= form.text_field :note, class: "form-control" %></td>
+                <td><%= form.collection_select :approver, @superiors, :id, :name, { include_blank: ""}, class: "form-control" %></td>
               </tr>
+              <% end %>
             </tbody>
           </table>
           <%= f.submit "変更を送信する", class: "btn btn-primary btn-approve-one-month-attendances" %>
