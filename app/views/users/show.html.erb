@@ -1,5 +1,5 @@
 <% provide(:title, @user.name) %>
-<% approver?(@approver) ? provide(:class_text, "default disabled") : provide(:class_text, "primary") %>
+<% approver?(current_user) ? provide(:class_text, "default disabled") : provide(:class_text, "primary") %>
 
 <div>
   <table class="table table-bordered table-condensed user-table">
@@ -32,7 +32,7 @@
   <% if @one_month_attendances.blank? %>
     <div>
       <span>【所属長承認申請のお知らせ】</span>
-      <% if @one_month_attendance_approver == current_user %>
+      <% if @one_month_attendance.approver == current_user.id %>
         <%= link_to "1ヶ月分勤怠申請の承認", one_month_attendances_show_one_month_attendance_user_path(@user, date: @first_day),
             remote: true, class: "btn btn-primary" %>
       <% end %>
@@ -49,8 +49,8 @@
   <% if @overtimes.blank? %>
     <div>
       <span>【残業申請のお知らせ】</span>
-      <% if @overtime_attendance_approver == current_user %>
-        <%= link_to "残業申請の承認", overtimes_approve_overtime_user_path(@user, date: @first_day),
+      <% if @overtime.approver == current_user.id %>
+        <%= link_to "残業申請の承認", overtimes_confirm_overtime_user_path(@user, date: @first_day),
             remote: true, class: "btn btn-primary" %>
       <% end %>
     </div>
@@ -176,3 +176,4 @@
 <div id="show-one-month-attendance" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
 <div id="show-overtime" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
 <div id="show-overtimes" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+<div id="confirm-overtime" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>

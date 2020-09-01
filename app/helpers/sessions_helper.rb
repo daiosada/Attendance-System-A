@@ -41,8 +41,12 @@ module SessionsHelper
     !current_user.nil?
   end
   
-  def approver?(approver)
-    approver.nil? ? false : approver == current_user
+  def approver?(user)
+    if @one_month_attendance.approver == user.id || @overtime.approver == user.id
+      true
+    else
+      false
+    end
   end
   
   def redirect_back_or(default_url)

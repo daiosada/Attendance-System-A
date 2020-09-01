@@ -20,6 +20,7 @@ Rails.application.routes.draw do
       patch 'overtimes/apply_overtime'
       get 'overtimes/show_overtimes'
       patch 'overtimes/approve_overtimes'
+      get 'overtimes/confirm_overtime'
     end
     collection do
       post :import

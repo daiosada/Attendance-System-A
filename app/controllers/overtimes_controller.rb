@@ -1,9 +1,9 @@
 class OvertimesController < ApplicationController
-  before_action :set_user, only: [:show_overtime, :apply_overtime, :show_overtimes]
+  before_action :set_user, only: [:show_overtime, :apply_overtime, :show_overtimes, :confirm_overtime]
   before_action :set_superiors, only: :show_overtime
-  before_action :set_overtime, only: :show_overtime
-  before_action :set_overtimes, only: :show_overtimes
-  before_action :set_statuses, only: :show_overtimes
+  before_action :set_overtime, only: [:show_overtime, :confirm_overtime]
+  before_action :set_overtimes, only: [:show_overtimes, :confirm_overtime]
+  before_action :set_statuses, only: [:show_overtime, :show_overtimes, :confirm_overtime]
   
   def show_overtime
   end
@@ -25,6 +25,7 @@ class OvertimesController < ApplicationController
   end
   
   def show_overtimes
+    # debugger
   end
   
   def approve_overtimes
@@ -41,6 +42,9 @@ class OvertimesController < ApplicationController
   rescue ActiveRecord::RecordInvalid
     flash[:danger] = "承認に失敗しました。やり直してください。"
     redirect_to current_user
+  end
+  
+  def confirm_overtime
   end
   
   private

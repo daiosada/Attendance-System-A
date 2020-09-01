@@ -37,9 +37,7 @@ class ApplicationController < ActionController::Base
   end
   
   def admin_or_correct_user_or_approver
-    @user = User.find(params[:id]) if @user.blank?
-    @approver = User.find(@one_month_attendance.approver) unless @one_month_attendance.approver.nil?
-    unless current_user?(@user) || current_user.admin? || approver?(@approver)
+    unless current_user?(@user) || current_user.admin? || approver?(current_user)
       flash[:danger] = "編集権限がありません。"
       redirect_to(root_url)
     end
