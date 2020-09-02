@@ -133,11 +133,20 @@
             <% end %>
           </td>
           <td><%= day.note %></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <% overtime = @one_month_overtimes.find_by(worked_on: day.worked_on) %>
+          <td><%= hour_over_midnight(overtime) if overtime.will_finish.present? %></td>
+          <td><%= format('%02d', overtime.will_finish.min) if overtime.will_finish.present? %></td>
+          <td><%= calculate_overtime(overtime, @user.designated_work_end_time) if overtime.will_finish.present? %></td>
+          <td><%= overtime.note if overtime.note.present? %></td>
+          <td>
+            <% if overtime.status == "承認" %>
+              <span>残業承認済</span>
+            <% elsif overtime.status == "否認" %>
+              <span>残業否認</span>
+            <% elsif overtime.status == "申請中" %>
+              <span>残業申請中</span>
+            <% end %>
+          </td>
         </tr>
       <% end %>
     </tbody>

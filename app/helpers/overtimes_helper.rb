@@ -15,4 +15,12 @@ module OvertimesHelper
       format("%.2f", (((overtime.will_finish.hour - endtime.hour + 24) * 60) + (overtime.will_finish.min - endtime.min)) / 60.0)
     end
   end
+  
+  def hour_over_midnight(overtime)
+    if !overtime.next_day?
+      overtime.will_finish.hour
+    else
+      overtime.will_finish.hour + 24
+    end
+  end
 end
