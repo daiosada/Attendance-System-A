@@ -101,4 +101,10 @@ class ApplicationController < ActionController::Base
       @overtimes = Overtime.where(approver: @user.id).where(status: "申請中")
     end
   end
+  
+  def set_applied_attendances
+    if @user.superior?
+      @applied_attendances = Attendance.where(approver: @user.id).where(status: "申請中")
+    end
+  end
 end

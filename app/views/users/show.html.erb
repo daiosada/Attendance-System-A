@@ -43,9 +43,20 @@
       <span class="number-of-notice"><%= @one_month_attendances.count %>件の通知があります</span>
     </div>
   <% end %>
-  <div>
-    <span>【勤怠変更申請のお知らせ】</span>
-  </div>
+  <% if @applied_attendances.blank? %>
+    <div>
+      <span>【勤怠変更申請のお知らせ】</span>
+      <% if @overtime.approver == current_user.id %>
+        <%= link_to "勤怠変更の承認", overtimes_confirm_overtime_user_path(@user, date: @first_day),
+            remote: true, class: "btn btn-primary" %>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="request-exist">
+      <%= link_to "【勤怠変更申請のお知らせ】", attendances_show_applied_attendances_user_path(@user), remote: true %>
+      <span class="number-of-notice"><%= @applied_attendances.count %>件の通知があります</span>
+    </div>
+  <% end %>
   <% if @overtimes.blank? %>
     <div>
       <span>【残業申請のお知らせ】</span>
@@ -171,7 +182,7 @@
               </span>
               <% unless @one_month_attendance.status == "申請中" %>
                 <%= f.collection_select :approver, @superiors, :id, :name, { include_blank: ""}, class: "form-control" %>
-                <%= f.submit "申請", class: "btn btn-primary btn-block" %>
+                <%= f.submit "申請", class: "btn btn-#{yield(:class_text)} btn-block" %>
               <% end %>
             <% end %>
           <% end %>
