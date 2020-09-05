@@ -1,9 +1,11 @@
 class AttendancesController < ApplicationController
-  before_action :set_user, only: :edit_one_month
+  before_action :set_user, only: [:edit_one_month, :show_applied_attendances]
   before_action :logged_in_user, only: [:update, :edit_one_month]
   before_action :admin_or_correct_user, only: [:edit_one_month, :update_one_month]
   before_action :set_one_month, only: :edit_one_month
   before_action :set_superiors, only: :edit_one_month
+  before_action :set_statuses, only: :show_applied_attendances
+  before_action :set_applied_attendances, only: :show_applied_attendances
   
   UPDATE_ERROR_MSG = "勤怠登録に失敗しました。やり直してください。"
   
@@ -45,9 +47,32 @@ class AttendancesController < ApplicationController
     redirect_to attendances_edit_one_month_user_url(date: params[:date])
   end
   
+  def show_applied_attendances
+  end
+  
+  def approve_applied_attendances
+    ActiveRecord::Base.transaction do
+      applied_attendances_params.each do |id, item|
+        if item[:checked]
+          attendance = Attendance.find(id)
+          attendance.update_attributes!(item)
+        end
+      end
+      flash[:success] = "勤怠変更申請を承認しました。"
+      redirect_to current_user
+    end
+  rescue ActiveRecord::RecordInvalid
+    flash[:danger] = "承認に失敗しました。やり直してください。"
+    redirect_to current_user
+  end
+  
   private
     
     def attendances_params
       params.require(:user).permit(attendances: [:started_at, :finished_at, :next_day, :note, :approver])[:attendances]
+    end
+    
+    def applied_attendances_params
+      params.permit(attendances: [:started_at, :finished_at, :next_day, :note, :approver, :status, :checked])[:attendances]
     end
 end

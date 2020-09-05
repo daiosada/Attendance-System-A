@@ -25,7 +25,6 @@ class OvertimesController < ApplicationController
   end
   
   def show_overtimes
-    # debugger
   end
   
   def approve_overtimes
