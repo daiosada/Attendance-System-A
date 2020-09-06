@@ -157,6 +157,13 @@
             <% elsif overtime.status == "申請中" %>
               <span>残業申請中</span>
             <% end %>
+            <% if day.status == "承認" %>
+              <span>勤怠編集承認済</span>
+            <% elsif day.status == "否認" %>
+              <span>勤怠編集否認</span>
+            <% elsif day.status == "申請中" %>
+              <span>勤怠編集申請中</span>
+            <% end %>
           </td>
         </tr>
       <% end %>

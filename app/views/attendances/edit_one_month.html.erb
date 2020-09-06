@@ -25,12 +25,12 @@
             <% if Date.current < day.worked_on %>
               <td>
                 <div class="form-inline">
-                  <%= attendance.time_select :started_at, { include_blank: ""}, disabled: true, class: "form-control" %>
+                  <%= attendance.time_select :started_at, { include_blank: "", disabled: true}, class: "form-control" %>
                 </div>  
               </td>
               <td>
                 <div class="form-inline">
-                  <%= attendance.time_select :finished_at, { include_blank: ""}, disabled: true, class: "form-control" %>
+                  <%= attendance.time_select :finished_at, { include_blank: "", disabled: true}, class: "form-control" %>
                 </div>    
               </td>
               <td><%= attendance.check_box :next_day, disabled: true %></td>
@@ -44,12 +44,20 @@
             <% else %>
               <td>
                 <div class="form-inline">
-                  <%= attendance.time_select :started_at, { include_blank: ""}, class: "form-control" %>
+                  <% if day.started_at.nil? %>
+                    <%= attendance.time_select :changed_started_at, { include_blank: "", ignore_data: true }, class: "form-control" %>
+                  <% else %>
+                    <%= attendance.time_select :changed_started_at, { default: day.started_at, ignore_data: true }, class: "form-control" %>
+                  <% end %>
                 </div>
               </td>
               <td>
                 <div class="form-inline">
-                  <%= attendance.time_select :finished_at, { include_blank: ""}, class: "form-control" %>
+                  <% if day.finished_at.nil? %>
+                    <%= attendance.time_select :changed_finished_at, { include_blank: "", ignore_data: true }, class: "form-control" %>
+                  <% else %>
+                    <%= attendance.time_select :changed_finished_at, { default: day.finished_at, ignore_data: true }, class: "form-control" %>
+                  <% end %>
                 </div>
               </td>
               <td><%= attendance.check_box :next_day %></td>
@@ -69,7 +77,7 @@
   
   <div class="center">
     <%= link_to "キャンセル", user_path(date: @first_day), class: "btn btn-primary" %>
-    <%= f.submit "編集を保存する", class: "btn btn-primary" %>
+    <%= f.submit "編集を申請する", class: "btn btn-primary" %>
   </div>
 </div>
 <% end %>

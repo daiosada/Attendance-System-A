@@ -48,14 +48,18 @@
                     <% day = attendance.worked_on %>
                     <td><%= l(day, format: :short) %></td>
                     <td class="<%= weekend(day) %>"><%= $days_of_the_week[day.wday] %></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td><%= attendance.started_at.hour if attendance.started_at.present? %></td>
+                    <td><%= format("%02d", attendance.started_at.min) if attendance.started_at.present? %></td>
+                    <td><%= attendance.finished_at.hour if attendance.finished_at.present? %></td>
+                    <td><%= format("%02d", attendance.finished_at.min) if attendance.finished_at.present? %></td>
+                    <td><%= attendance.changed_started_at.hour if attendance.changed_started_at.present? %></td>
+                    <td><%= format("%02d", attendance.changed_started_at.min) if attendance.changed_started_at.present? %></td>
+                    <% if attendance.next_day? %>
+                      <td><%= attendance.changed_finished_at.hour + 24 if attendance.changed_finished_at.present? %></td>
+                    <% else %>
+                      <td><%= attendance.changed_finished_at.hour if attendance.changed_finished_at.present? %></td>
+                    <% end %>
+                    <td><%= format("%02d", attendance.changed_finished_at.min) %></td>
                     <td><%= attendance.note %></td>
                     <td><%= form.select :status, @statuses, { selected: attendance.status }, class: "form-control" %></td>
                     <td><%= form.check_box :checked %></td>
