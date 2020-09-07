@@ -1,5 +1,5 @@
 class AttendancesController < ApplicationController
-  before_action :set_user, only: [:edit_one_month, :show_applied_attendances]
+  before_action :set_user, only: [:edit_one_month, :show_applied_attendances, :show_attendance_log, :search_attendance_log]
   before_action :logged_in_user, only: [:update, :edit_one_month]
   before_action :admin_or_correct_user, only: [:edit_one_month, :update_one_month]
   before_action :set_one_month, only: :edit_one_month
@@ -58,7 +58,7 @@ class AttendancesController < ApplicationController
         if item[:checked]
           attendance = Attendance.find(id)
           attendance.update_attributes!(item)
-          attendance.update_attributes!(approved: true)
+          attendance.update_attributes!(approved: true, approved_at: Time.current)
           flash[:success] = "勤怠変更申請を承認しました。"
         end
       end
@@ -67,6 +67,16 @@ class AttendancesController < ApplicationController
   rescue ActiveRecord::RecordInvalid
     flash[:danger] = "承認に失敗しました。やり直してください。"
     redirect_to current_user
+  end
+  
+  def show_attendance_log
+    @day = params[:date].to_date
+    @attendances = @user.attendances.where(worked_on: @day.beginning_of_month..@day.end_of_month, approved: true)
+  end
+  
+  def search_attendance_log
+    day = Date.new(params[:year].to_i, params[:month].to_i, 1)
+    redirect_to attendances_show_attendance_log_user_url(@user, date: day)
   end
   
   private

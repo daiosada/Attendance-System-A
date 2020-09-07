@@ -1,0 +1,39 @@
+<% provide(:title, "Attendance Log") %>
+<h1>勤怠ログ</h1>
+
+<div class="col-md-1 col-md-offset-1">
+  <%= form_with(url: attendances_search_attendance_log_user_path(@user), local: true) do |f| %>
+    <%= f.submit "検索", class: "btn btn-primary btn-block" %>
+    <%= f.select :year, (Date.today.year - 9)..(Date.today.year), { selected: @day.year }, class: "form-control" %>
+    <%= f.select :month, 1..12, { selected: @day.month }, class: "form-control" %>
+  <% end %>
+</div>
+
+<div class="col-md-10 col-md-offset-1">
+  <table class="table table-bordered table-striped table-hover offices-table">
+    <thead>
+      <tr>
+        <th>日付</th>
+        <th>変更前出社時間</th>
+        <th>変更前退社時間</th>
+        <th>変更後出社時間</th>
+        <th>変更後退社時間</th>
+        <th>指示者</th>
+        <th>承認日</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @attendances.each do |attendance| %>
+        <tr>
+          <td><%= l(attendance.worked_on, format: :default) %></td>
+          <td><%= l(attendance.initial_started_at, format: :time) if attendance.initial_started_at.present? %></td>
+          <td><%= l(attendance.initial_finished_at, format: :time) if attendance.initial_finished_at.present? %></td>
+          <td><%= l(attendance.changed_started_at, format: :time) if attendance.changed_started_at.present? %></td>
+          <td><%= l(attendance.changed_finished_at, format: :time) if attendance.changed_finished_at.present? %></td>
+          <td><%= User.find(attendance.approver).name if attendance.approver.present? %></td>
+          <td><%= l(attendance.approved_at.to_date, format: :default) if attendance.approved_at.present? %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
