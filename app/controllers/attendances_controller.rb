@@ -56,10 +56,24 @@ class AttendancesController < ApplicationController
     ActiveRecord::Base.transaction do
       applied_attendances_params.each do |id, item|
         if item[:checked]
-          attendance = Attendance.find(id)
-          attendance.update_attributes!(item)
-          attendance.update_attributes!(approved: true, approved_at: Time.current)
-          flash[:success] = "勤怠変更申請を承認しました。"
+            attendance = Attendance.find(id)
+          if item[:status] == "承認"
+            changed_started_at = attendance.changed_started_at
+            changed_finished_at = attendance.next_day? ? attendance.changed_finished_at.tomorrow : attendance.changed_finished_at
+            attendance.update_attributes!(started_at: changed_started_at, finished_at: changed_finished_at,
+                                          approved: true, approved_at: Time.current)
+            attendance.update_attributes!(item)
+            flash[:success] = "勤怠変更申請を承認しました。"
+          elsif item[:status] == "否認"
+            attendance.update_attributes!(item)
+            flash[:danger] = "勤怠変更申請を否認しました。"
+          else
+            attendance.update_attributes!(item)
+          end
+        else
+          unless item[:status] == "申請中"
+            flash[:danger] = "確認欄にチェックを入れてください。"
+          end
         end
       end
       redirect_to current_user

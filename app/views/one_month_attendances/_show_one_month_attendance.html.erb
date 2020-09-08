@@ -23,7 +23,7 @@
                   <tr>
                     <td><%= @one_month_attendance.month.month %>月</td>
                     <td><%= form.select :status, @statuses, { selected: @one_month_attendance.status }, class: "form-control" %></td>
-                    <td><%= form.check_box :checked %></td>
+                    <td><%= form.check_box :checked, {}, true, false %></td>
                   </tr>
                   <% end %>
               </tbody>

@@ -62,7 +62,7 @@
                     <td><%= format("%02d", attendance.changed_finished_at.min) %></td>
                     <td><%= attendance.note %></td>
                     <td><%= form.select :status, @statuses, { selected: attendance.status }, class: "form-control" %></td>
-                    <td><%= form.check_box :checked %></td>
+                    <td><%= form.check_box :checked, {}, true, false %></td>
                     <td><%= link_to "確認", user_path(id: user_id, date: day.beginning_of_month), class: "btn btn-primary" %></td>
                   </tr>
                   <% end %>

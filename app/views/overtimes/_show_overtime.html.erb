@@ -30,7 +30,7 @@
                     <%= form.time_select :will_finish, { include_blank: ""}, class: "form-control" %>
                   </div>
                 </td>
-                <td><%= form.check_box :next_day %></td>
+                <td><%= form.check_box :next_day, {}, true, false %></td>
                 <td><%= form.text_field :note, class: "form-control" %></td>
                 <td><%= form.collection_select :approver, @superiors, :id, :name, { include_blank: ""}, class: "form-control" %></td>
               </tr>

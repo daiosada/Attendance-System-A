@@ -120,7 +120,7 @@
           <td><%= l(day.worked_on, format: :short) %></td>
           <td class="<%= weekend %>"><%= $days_of_the_week[day.worked_on.wday] %></td>
           <td><%= day.started_at.hour if day.started_at.present? %></td>
-          <td><%= day.started_at.floor_to(15.minutes).min if day.started_at.present? %></td>
+          <td><%= format("%02d", day.started_at.floor_to(15.minutes).min) if day.started_at.present? %></td>
           <td>
             <% if btn_text = attendance_state(day) %>
               <% if btn_text == '出勤' %>
@@ -129,7 +129,7 @@
             <% end %>
           </td>
           <td><%= day.finished_at.hour if day.finished_at.present? %></td>
-          <td><%= day.finished_at.floor_to(15.minutes).min if day.finished_at.present? %></td>
+          <td><%= format("%02d", day.finished_at.floor_to(15.minutes).min) if day.finished_at.present? %></td>
           <td>
             <% if btn_text = attendance_state(day) %>
               <% if btn_text == '退勤' %>
