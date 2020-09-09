@@ -41,8 +41,8 @@ module SessionsHelper
     !current_user.nil?
   end
   
-  def approver?(user)
-    if @one_month_attendance.approver == user.id || @overtime.approver == user.id
+  def approver?
+    if !@one_month_attendances.blank? || !@applied_attendances.blank? || !@overtimes.blank?
       true
     else
       false

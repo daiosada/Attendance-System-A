@@ -30,10 +30,17 @@ class OneMonthAttendancesController < ApplicationController
   def approve_one_month_attendances
     ActiveRecord::Base.transaction do
       one_month_attendances_params.each do |id, item|
+        one_month_attendance = OneMonthAttendance.find(id)
         if item[:checked]
-          one_month_attendance = OneMonthAttendance.find(id)
-          one_month_attendance.update_attributes!(item)
-          flash[:success] = "1ヶ月分勤怠申請を承認しました。"
+          if item[:status] == "承認"
+            one_month_attendance.update_attributes!(item)
+            flash[:success] = "1ヶ月分勤怠申請を承認しました。"
+          elsif item[:status] == "否認"
+            one_month_attendance.update_attributes!(item)
+            flash[:danger] == "1ヶ月分勤怠申請を否認しました。"
+          else
+            one_month_attendance.update_attributes!(item)
+          end
         end
       end
     end

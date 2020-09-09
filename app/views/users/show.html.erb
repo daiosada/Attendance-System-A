@@ -1,5 +1,5 @@
 <% provide(:title, @user.name) %>
-<% approver?(current_user) ? provide(:class_text, "default disabled") : provide(:class_text, "primary") %>
+<% !current_user?(@user) && approver? ? provide(:class_text, "default disabled") : provide(:class_text, "primary") %>
 
 <div>
   <table class="table table-bordered table-condensed user-table">
@@ -29,7 +29,12 @@
 </div>
 
 <% if current_user.superior? %>
-  <% if @one_month_attendances.blank? %>
+  <% if !@one_month_attendances.blank? && current_user?(@user) %>
+    <div class="request-exist">
+      <%= link_to "【所属長承認申請のお知らせ】", one_month_attendances_show_one_month_attendances_user_path(@user), remote: true %>
+      <span class="number-of-notice"><%= @one_month_attendances.count %>件の通知があります</span>
+    </div>
+  <% else %>
     <div>
       <span>【所属長承認申請のお知らせ】</span>
       <% if @one_month_attendance.approver == current_user.id %>
@@ -37,38 +42,33 @@
             remote: true, class: "btn btn-primary" %>
       <% end %>
     </div>
-  <% else %>
-    <div class="request-exist">
-      <%= link_to "【所属長承認申請のお知らせ】", one_month_attendances_show_one_month_attendances_user_path(@user), remote: true %>
-      <span class="number-of-notice"><%= @one_month_attendances.count %>件の通知があります</span>
-    </div>
   <% end %>
-  <% if @applied_attendances.blank? %>
-    <div>
-      <span>【勤怠変更申請のお知らせ】</span>
-      <% if @overtime.approver == current_user.id %>
-        <%= link_to "勤怠変更の承認", overtimes_confirm_overtime_user_path(@user, date: @first_day),
-            remote: true, class: "btn btn-primary" %>
-      <% end %>
-    </div>
-  <% else %>
+  <% if !@applied_attendances.blank? && current_user?(@user) %>
     <div class="request-exist">
       <%= link_to "【勤怠変更申請のお知らせ】", attendances_show_applied_attendances_user_path(@user), remote: true %>
       <span class="number-of-notice"><%= @applied_attendances.count %>件の通知があります</span>
     </div>
-  <% end %>
-  <% if @overtimes.blank? %>
+  <% else %>
     <div>
-      <span>【残業申請のお知らせ】</span>
-      <% if @overtime.approver == current_user.id %>
-        <%= link_to "残業申請の承認", overtimes_confirm_overtime_user_path(@user, date: @first_day),
+      <span>【勤怠変更申請のお知らせ】</span>
+      <% if @applied_attendance.approver == current_user.id %>
+        <%= link_to "勤怠変更の承認", overtimes_confirm_overtime_user_path(@user, date: @applied_attendance.worked_on),
             remote: true, class: "btn btn-primary" %>
       <% end %>
     </div>
-  <% else %>
+  <% end %>
+  <% if !@overtimes.blank? && current_user?(@user) %>
     <div class="request-exist">
       <%= link_to "【残業申請のお知らせ】", overtimes_show_overtimes_user_path(@user), remote: true %>
       <span class="number-of-notice"><%= @overtimes.count %>件の通知があります</span>
+    </div>
+  <% else %>
+    <div>
+      <span>【残業申請のお知らせ】</span>
+      <% if @overtime.approver == current_user.id %>
+        <%= link_to "残業申請の承認", overtimes_confirm_overtime_user_path(@user, date: @overtime.worked_on),
+            remote: true, class: "btn btn-primary" %>
+      <% end %>
     </div>
   <% end %>
 <% end %>
@@ -176,7 +176,7 @@
         <td><%= format("%.2f", @total_working_times.to_f) %></td>
         <td colspan="5"></td>
         <td>
-          <% if !current_user.admin? %>
+          <% if !current_user.admin? && current_user?(@user)%>
             <%= form_with(model: [@user, @one_month_attendance], local: true) do |f| %>
               所属長承認
               <span class="one-month-attendance-status">

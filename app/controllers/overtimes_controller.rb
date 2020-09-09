@@ -12,9 +12,11 @@ class OvertimesController < ApplicationController
     ActiveRecord::Base.transaction do
       overtime_params.each do |id, item|
         overtime = Overtime.find(id)
-        if overtime.update_attributes!(item)
-          overtime.update_attributes!(status: "申請中", checked: false)
-          flash[:success] = "#{l(overtime.worked_on, format: :short)}の残業を申請しました。"
+        unless item[:approver].blank?
+          if overtime.update_attributes!(item)
+            overtime.update_attributes!(status: "申請中", checked: false)
+            flash[:success] = "#{l(overtime.worked_on, format: :short)}の残業を申請しました。"
+          end
         end
       end
       redirect_to current_user
@@ -32,10 +34,21 @@ class OvertimesController < ApplicationController
       overtime_params.each do |id, item|
         if item[:checked]
           overtime = Overtime.find(id)
-          overtime.update_attributes!(item)
+          if item[:status] == "承認"
+            overtime.update_attributes!(item)
+            flash[:success] = "残業申請を承認しました。"
+          elsif item[:status] =="否認"
+            overtime.update_attributes!(item)
+            flash[:danger] = "残業申請を否認しました。"
+          else
+            overtime.update_attributes!(item)
+          end
+        else
+          unless item[:checked] == "申請中"
+            flash[:danger] = "確認欄にチェックを入れてください。"
+          end
         end
       end
-      flash[:success] = "残業申請を承認しました。"
       redirect_to current_user
     end
   rescue ActiveRecord::RecordInvalid

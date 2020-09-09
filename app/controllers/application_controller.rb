@@ -37,7 +37,8 @@ class ApplicationController < ActionController::Base
   end
   
   def admin_or_correct_user_or_approver
-    unless current_user?(@user) || current_user.admin? || approver?(current_user)
+    @user = User.find(params[:id]) if @user.blank?
+    unless current_user.admin? || current_user?(@user) || approver?
       flash[:danger] = "編集権限がありません。"
       redirect_to(root_url)
     end
@@ -45,7 +46,7 @@ class ApplicationController < ActionController::Base
   
   def set_one_month
     @first_day = params[:date].nil? ?
-    Date.current.beginning_of_month : params[:date].to_date
+    Date.current.beginning_of_month : params[:date].to_date.beginning_of_month
     @last_day = @first_day.end_of_month
     one_month = [*@first_day..@last_day]
     
@@ -71,18 +72,6 @@ class ApplicationController < ActionController::Base
     redirect_to root_url
   end
   
-  def set_one_month_attendance
-    @one_month_attendance = @user.one_month_attendances.find_by(month: @first_day)
-    @one_month_attendance = @user.one_month_attendances.create(month: @first_day) if @one_month_attendance.blank?
-    @one_month_attendance_approver = User.find(@one_month_attendance.approver) unless @one_month_attendance.approver.nil?
-  end
-  
-  def set_one_month_attendances
-    if @user.superior?
-      @one_month_attendances = OneMonthAttendance.where(approver: @user.id).where(status: "申請中")
-    end
-  end
-    
   def set_statuses
     @statuses = {"なし": "なし",
                  "申請中": "申請中",
@@ -90,21 +79,36 @@ class ApplicationController < ActionController::Base
                  "否認": "否認"}
   end
   
-  def set_overtime
-    @overtime = Overtime.find_by(worked_on: params[:date], user_id: params[:id])
-    @overtime = Overtime.create(worked_on: params[:date], user_id: params[:id]) if @overtime.blank?
-    @overtime_approver = User.find(@overtime.approver) unless @overtime.approver.nil?
+  def set_one_month_attendance
+    @one_month_attendance = @user.one_month_attendances.find_by(month: @first_day)
+    @one_month_attendance = @user.one_month_attendances.create(month: @first_day) if @one_month_attendance.nil?
   end
   
-  def set_overtimes
-    if @user.superior?
-      @overtimes = Overtime.where(approver: @user.id).where(status: "申請中")
+  def set_one_month_attendances
+    if current_user.superior?
+      @one_month_attendances = OneMonthAttendance.where(approver: current_user.id).where(status: "申請中")
     end
   end
   
+  def set_overtime
+    @overtime = @user.overtimes.find_by(worked_on: params[:date])
+    @overtime = @user.overtimes.create(worked_on: params[:date]) if @overtime.nil?
+  end
+  
+  def set_overtimes
+    if current_user.superior?
+      @overtimes = Overtime.where(approver: current_user.id).where(status: "申請中")
+    end
+  end
+  
+  def set_applied_attendance
+    @applied_attendance = @user.attendances.find_by(worked_on: params[:date])
+    @applied_attendance = @user.attendances.create(worked_on: params[:date]) if @applied_attendance.nil?
+  end
+  
   def set_applied_attendances
-    if @user.superior?
-      @applied_attendances = Attendance.where(approver: @user.id).where(status: "申請中")
+    if current_user.superior?
+      @applied_attendances = Attendance.where(approver: current_user.id).where(status: "申請中")
     end
   end
 end
