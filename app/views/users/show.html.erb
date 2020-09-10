@@ -37,7 +37,7 @@
   <% else %>
     <div>
       <span>【所属長承認申請のお知らせ】</span>
-      <% if @one_month_attendance.approver == current_user.id %>
+      <% if @one_month_attendance.approver == current_user.id && @one_month_attendance.status == "申請中" %>
         <%= link_to "1ヶ月分勤怠申請の承認", one_month_attendances_show_one_month_attendance_user_path(@user, date: @first_day),
             remote: true, class: "btn btn-primary" %>
       <% end %>
@@ -51,8 +51,8 @@
   <% else %>
     <div>
       <span>【勤怠変更申請のお知らせ】</span>
-      <% if @applied_attendance.approver == current_user.id %>
-        <%= link_to "勤怠変更の承認", overtimes_confirm_overtime_user_path(@user, date: @applied_attendance.worked_on),
+      <% if @applied_attendance.approver == current_user.id && @applied_attendance.status == "申請中" %>
+        <%= link_to "勤怠変更の承認", attendances_confirm_applied_attendance_user_path(@user, date: @applied_attendance.worked_on),
             remote: true, class: "btn btn-primary" %>
       <% end %>
     </div>
@@ -65,7 +65,7 @@
   <% else %>
     <div>
       <span>【残業申請のお知らせ】</span>
-      <% if @overtime.approver == current_user.id %>
+      <% if @overtime.approver == current_user.id && @overtime.status == "申請中" %>
         <%= link_to "残業申請の承認", overtimes_confirm_overtime_user_path(@user, date: @overtime.worked_on),
             remote: true, class: "btn btn-primary" %>
       <% end %>
@@ -205,3 +205,4 @@
 <div id="show-overtimes" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
 <div id="confirm-overtime" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
 <div id="show-applied-attendances" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+<div id="confirm-applied-attendance" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>

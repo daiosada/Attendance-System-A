@@ -1,10 +1,12 @@
 class AttendancesController < ApplicationController
-  before_action :set_user, only: [:edit_one_month, :show_applied_attendances, :show_attendance_log, :search_attendance_log]
+  before_action :set_user, only: [:edit_one_month, :show_applied_attendances, :confirm_applied_attendance,
+                                  :show_attendance_log, :search_attendance_log]
   before_action :logged_in_user, only: [:update, :edit_one_month]
   before_action :admin_or_correct_user, only: [:edit_one_month, :update_one_month]
   before_action :set_one_month, only: :edit_one_month
   before_action :set_superiors, only: :edit_one_month
-  before_action :set_statuses, only: :show_applied_attendances
+  before_action :set_statuses, only: [:show_applied_attendances, :confirm_applied_attendance]
+  before_action :set_applied_attendance, only: :confirm_applied_attendance
   before_action :set_applied_attendances, only: :show_applied_attendances
   
   UPDATE_ERROR_MSG = "勤怠登録に失敗しました。やり直してください。"
@@ -81,6 +83,9 @@ class AttendancesController < ApplicationController
   rescue ActiveRecord::RecordInvalid
     flash[:danger] = "承認に失敗しました。やり直してください。"
     redirect_to current_user
+  end
+  
+  def confirm_applied_attendance
   end
   
   def show_attendance_log

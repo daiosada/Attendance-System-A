@@ -23,8 +23,8 @@
                 </tr>
               </thead>
               <tbody>
-                <% Overtime.where(user_id: @user.id).order(:worked_on).each do |overtime| %>
-                  <%= fields_for "overtimes[]", overtime do |form| %>
+                <%= fields_for "overtimes[]", @overtime do |form| %>
+                  <% overtime = @overtime %>
                   <tr>
                     <% day = overtime.worked_on %>
                     <td><%= l(day, format: :short) %></td>
@@ -36,7 +36,6 @@
                     <td><%= form.select :status, @statuses, { selected: overtime.status }, class: "form-control" %></td>
                     <td><%= form.check_box :checked, {}, true, false %></td>
                   </tr>
-                  <% end %>
                 <% end %>
               </tbody>
             </table>
