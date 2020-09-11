@@ -75,7 +75,7 @@
 
 <div class="btn-users-show">
   <%= link_to "勤怠を編集", attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-#{yield(:class_text)}" %>
-  <%= link_to "CSV出力", '#', class: "btn btn-#{yield(:class_text)}" %><br>
+  <%= link_to "CSV出力", attendances_export_user_path(@user, date: @first_day), class: "btn btn-#{yield(:class_text)}" %><br>
   <%= link_to "勤怠修正ログ（承認済）", attendances_show_attendance_log_user_path(@user, date: @first_day), class: "btn btn-#{yield(:class_text)}" %>
 </div>
 

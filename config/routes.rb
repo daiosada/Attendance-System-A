@@ -26,6 +26,7 @@ Rails.application.routes.draw do
       get 'overtimes/confirm_overtime'
       get 'attendances/show_attendance_log'
       post 'attendances/search_attendance_log'
+      get 'attendances/export'
     end
     collection do
       post :import

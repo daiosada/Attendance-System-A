@@ -1,9 +1,9 @@
 class AttendancesController < ApplicationController
   before_action :set_user, only: [:edit_one_month, :show_applied_attendances, :confirm_applied_attendance,
-                                  :show_attendance_log, :search_attendance_log]
+                                  :show_attendance_log, :search_attendance_log, :export]
   before_action :logged_in_user, only: [:update, :edit_one_month]
   before_action :admin_or_correct_user, only: [:edit_one_month, :update_one_month]
-  before_action :set_one_month, only: :edit_one_month
+  before_action :set_one_month, only: [:edit_one_month, :export]
   before_action :set_superiors, only: :edit_one_month
   before_action :set_statuses, only: [:show_applied_attendances, :confirm_applied_attendance]
   before_action :set_applied_attendance, only: :confirm_applied_attendance
@@ -96,6 +96,27 @@ class AttendancesController < ApplicationController
   def search_attendance_log
     day = Date.new(params[:year].to_i, params[:month].to_i, 1)
     redirect_to attendances_show_attendance_log_user_url(@user, date: day)
+  end
+  
+  def export
+    day = params[:date].to_date
+    filename = "#{@user.name}の#{day.year}年#{day.month}月勤怠情報.csv"
+    
+    data = CSV.generate do |csv|
+      column_names = ["worked_on", "started_at", "finished_at"]
+      header = t(column_names, scope: [:activerecord, :attributes, :attendance])
+      csv << header
+      @attendances.each do |attendance|
+        column_values = attendance.attributes.values_at(*column_names)
+        column_values.each do |value|
+          if value.class == ActiveSupport::TimeWithZone
+            column_values[column_values.index(value)] = value.floor_to(15.minutes).strftime("%H:%M")
+          end
+        end
+        csv << column_values
+      end
+    end
+    send_data(data, filename: ERB::Util.url_encode(filename))
   end
   
   private
