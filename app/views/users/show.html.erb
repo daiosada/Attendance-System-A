@@ -151,18 +151,18 @@
           <td><%= overtime.note if overtime.note.present? %></td>
           <td>
             <% if overtime.status == "承認" %>
-              <span>残業承認済</span>
+              <span><%= User.find(overtime.approver).name %>から残業承認済</span>
             <% elsif overtime.status == "否認" %>
-              <span>残業否認</span>
+              <span><%= User.find(overtime.approver).name %>から残業否認</span>
             <% elsif overtime.status == "申請中" %>
-              <span>残業申請中</span>
+              <span><%= User.find(overtime.approver).name %>へ残業申請中</span>
             <% end %>
             <% if day.status == "承認" %>
-              <span>勤怠編集承認済</span>
+              <span><%= User.find(day.approver).name %>から勤怠編集承認済</span>
             <% elsif day.status == "否認" %>
-              <span>勤怠編集否認</span>
+              <span><%= User.find(day.approver).name %>から勤怠編集否認</span>
             <% elsif day.status == "申請中" %>
-              <span>勤怠編集申請中</span>
+              <span><%= User.find(day.approver).name %>へ勤怠編集申請中</span>
             <% end %>
           </td>
         </tr>
@@ -188,7 +188,7 @@
                     end %>
               </span>
               <% unless @one_month_attendance.status == "申請中" %>
-                <%= f.collection_select :approver, @superiors, :id, :name, { include_blank: ""}, class: "form-control" %>
+                <%= f.collection_select :approver, @superiors, :id, :name, { include_blank: true}, class: "form-control" %>
                 <%= f.submit "申請", class: "btn btn-#{yield(:class_text)} btn-block" %>
               <% end %>
             <% end %>

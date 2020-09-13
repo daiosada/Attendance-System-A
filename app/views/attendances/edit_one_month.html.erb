@@ -25,12 +25,12 @@
             <% if Date.current < day.worked_on %>
               <td>
                 <div class="form-inline">
-                  <%= attendance.time_select :started_at, { include_blank: "", disabled: true}, class: "form-control" %>
+                  <%= attendance.time_select :started_at, { include_blank: true, disabled: true}, class: "form-control" %>
                 </div>  
               </td>
               <td>
                 <div class="form-inline">
-                  <%= attendance.time_select :finished_at, { include_blank: "", disabled: true}, class: "form-control" %>
+                  <%= attendance.time_select :finished_at, { include_blank: true, disabled: true}, class: "form-control" %>
                 </div>    
               </td>
               <td><%= attendance.check_box :next_day, disabled: true %></td>
@@ -40,23 +40,27 @@
                 <% end %>
               </td>
               <td><%= attendance.text_field :note, readonly: true, class: "form-control" %></td>
-              <td><%= attendance.collection_select :approver, @superiors, :id, :name, { include_blank: ""}, disabled: true, class: "form-control" %></td>
+              <td><%= attendance.collection_select :approver, @superiors, :id, :name, { include_blank: true}, disabled: true, class: "form-control" %></td>
             <% else %>
               <td>
                 <div class="form-inline">
-                  <% if day.started_at.nil? %>
-                    <%= attendance.time_select :changed_started_at, { include_blank: "", ignore_data: true }, class: "form-control" %>
+                  <% if day.started_at.present? %>
+                    <%= attendance.datetime_select :changed_started_at, { discard_year: true, discard_month: true, discard_day: true,
+                                                                          default: day.started_at, ignore_date: true }, class: "form-control" %>
                   <% else %>
-                    <%= attendance.time_select :changed_started_at, { default: day.started_at, ignore_data: true }, class: "form-control" %>
+                    <%= attendance.datetime_select :changed_started_at, { discard_year: true, discard_month: true, discard_day: true,
+                                                                          include_blank: true, ignore_date: true }, class: "form-control" %>
                   <% end %>
                 </div>
               </td>
               <td>
                 <div class="form-inline">
-                  <% if day.finished_at.nil? %>
-                    <%= attendance.time_select :changed_finished_at, { include_blank: "", ignore_data: true }, class: "form-control" %>
+                  <% if day.finished_at.present? %>
+                    <%= attendance.datetime_select :changed_finished_at, { discard_year: true, discard_month: true, discard_day: true,
+                                                                           default: day.finished_at, ignore_date: true }, class: "form-control" %>
                   <% else %>
-                    <%= attendance.time_select :changed_finished_at, { default: day.finished_at, ignore_data: true }, class: "form-control" %>
+                    <%= attendance.datetime_select :changed_finished_at, { discard_year: true, discard_month: true, discard_day: true,
+                                                                           include_blank: true, ignore_date: true }, class: "form-control" %>
                   <% end %>
                 </div>
               </td>
@@ -67,7 +71,7 @@
                 <% end %>
               </td>
               <td><%= attendance.text_field :note, class: "form-control" %></td>
-              <td><%= attendance.collection_select :approver, @superiors, :id, :name, { include_blank: ""}, class: "form-control" %></td>
+              <td><%= attendance.collection_select :approver, @superiors, :id, :name, { include_blank: true}, class: "form-control" %></td>
             <% end %>
           </tr>
         <% end %>

@@ -5,9 +5,11 @@ User.create!(name: "管理者",
              password: "password",
              password_confirmation: "password",
              admin: true)
+
+a = "A".ord
  
 2.times do |n|
-  name  = Faker::Name.name
+  name  = "上長" + (a + n).chr
   email = "superior-#{n+1}@email.com"
   password = "password"
   User.create!(name: name,
@@ -17,7 +19,7 @@ User.create!(name: "管理者",
                superior: true)
 end
 
-10.times do |n|
+2.times do |n|
   name  = Faker::Name.name
   email = "sample-#{n+1}@email.com"
   password = "password"
