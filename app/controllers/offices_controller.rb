@@ -1,6 +1,7 @@
 class OfficesController < ApplicationController
   before_action :set_office, only: [:edit, :update, :destroy]
   before_action :sort_office, only: [:index, :new]
+  before_action :admin_user
   
   def index
   end

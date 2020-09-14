@@ -38,6 +38,7 @@ class AttendancesController < ApplicationController
       attendances_params.each do |id, item|
         attendance = Attendance.find(id)
         unless item[:approver].blank?
+          item["changed_finished_at(3i)"] = (item["changed_finished_at(3i)"].to_i + 1).to_s if item[:next_day]
           if attendance.update_attributes!(item)
             attendance.update_attributes!(status: "申請中", checked: false, approved: false)
             flash[:success] = "勤怠変更を申請しました。"
@@ -60,9 +61,7 @@ class AttendancesController < ApplicationController
         if item[:checked]
             attendance = Attendance.find(id)
           if item[:status] == "承認"
-            changed_started_at = attendance.changed_started_at
-            changed_finished_at = attendance.next_day? ? attendance.changed_finished_at.tomorrow : attendance.changed_finished_at
-            attendance.update_attributes!(started_at: changed_started_at, finished_at: changed_finished_at,
+            attendance.update_attributes!(started_at: attendance.changed_started_at, finished_at: attendance.changed_finished_at,
                                           approved: true, approved_at: Time.current)
             attendance.update_attributes!(item)
             flash[:success] = "勤怠変更申請を承認しました。"

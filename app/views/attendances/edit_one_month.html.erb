@@ -46,10 +46,10 @@
                 <div class="form-inline">
                   <% if day.started_at.present? %>
                     <%= attendance.datetime_select :changed_started_at, { discard_year: true, discard_month: true, discard_day: true,
-                                                                          default: day.started_at, ignore_date: true }, class: "form-control" %>
+                                                                          default: day.started_at }, class: "form-control" %>
                   <% else %>
                     <%= attendance.datetime_select :changed_started_at, { discard_year: true, discard_month: true, discard_day: true,
-                                                                          include_blank: true, ignore_date: true }, class: "form-control" %>
+                                                                          include_blank: "" }, class: "form-control" %>
                   <% end %>
                 </div>
               </td>
@@ -57,14 +57,14 @@
                 <div class="form-inline">
                   <% if day.finished_at.present? %>
                     <%= attendance.datetime_select :changed_finished_at, { discard_year: true, discard_month: true, discard_day: true,
-                                                                           default: day.finished_at, ignore_date: true }, class: "form-control" %>
+                                                                           default: day.finished_at}, class: "form-control" %>
                   <% else %>
                     <%= attendance.datetime_select :changed_finished_at, { discard_year: true, discard_month: true, discard_day: true,
-                                                                           include_blank: true, ignore_date: true }, class: "form-control" %>
+                                                                           include_blank: "" }, class: "form-control" %>
                   <% end %>
                 </div>
               </td>
-              <td><%= attendance.check_box :next_day %></td>
+              <td><%= attendance.check_box :next_day, {}, true, false %></td>
               <td>
                 <% if day.started_at.present? && day.finished_at.present? %>
                   <%= working_times(day.started_at, day.finished_at) %>
