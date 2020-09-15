@@ -41,6 +41,10 @@ class OneMonthAttendancesController < ApplicationController
           else
             one_month_attendance.update_attributes!(item)
           end
+        else
+          unless item[:status] == "申請中"
+            flash[:danger] = "確認欄にチェックを入れてください。"
+          end
         end
       end
     end

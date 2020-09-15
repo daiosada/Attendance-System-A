@@ -27,7 +27,8 @@
                     <td><%= one_month_attendance.month.month %>月</td>
                     <td><%= form.select :status, @statuses, { selected: one_month_attendance.status }, class: "form-control" %></td>
                     <td><%= form.check_box :checked, {}, true, false %></td>
-                    <td><%= link_to "確認", user_path(id: user_id, date: one_month_attendance.month), class: "btn btn-primary" %></td>
+                    <td><%= link_to "確認", user_path(id: user_id, date: one_month_attendance.month,
+                            type: "one_month_attendance"), class: "btn btn-primary" %></td>
                   </tr>
                   <% end %>
                 <% end %>

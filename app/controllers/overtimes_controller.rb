@@ -44,7 +44,7 @@ class OvertimesController < ApplicationController
             overtime.update_attributes!(item)
           end
         else
-          unless item[:checked] == "申請中"
+          unless item[:status] == "申請中"
             flash[:danger] = "確認欄にチェックを入れてください。"
           end
         end

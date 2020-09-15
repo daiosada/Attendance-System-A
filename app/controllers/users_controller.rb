@@ -11,6 +11,7 @@ class UsersController < ApplicationController
   before_action :set_applied_attendance, only: :show
   before_action :set_applied_attendances, only: :show
   before_action :admin_or_correct_user_or_approver, only: [:show, :edit, :update]
+  before_action :application_type, only: :show
   
   def index
     @users = User.paginate(page: params[:page]).search(params[:search])
@@ -92,5 +93,9 @@ class UsersController < ApplicationController
     
     def basic_info_params
       params.require(:user).permit(:basic_work_time, :designated_work_start_time, :designated_work_end_time)
+    end
+    
+    def application_type
+      params[:type].present? ? @type = params[:type] : ""
     end
 end

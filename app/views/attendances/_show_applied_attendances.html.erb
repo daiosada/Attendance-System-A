@@ -63,7 +63,7 @@
                     <td><%= attendance.note %></td>
                     <td><%= form.select :status, @statuses, { selected: attendance.status }, class: "form-control" %></td>
                     <td><%= form.check_box :checked, {}, true, false %></td>
-                    <td><%= link_to "確認", user_path(id: user_id, date: day), class: "btn btn-primary" %></td>
+                    <td><%= link_to "確認", user_path(id: user_id, date: day, type: "applied_attendance"), class: "btn btn-primary" %></td>
                   </tr>
                   <% end %>
                 <% end %>

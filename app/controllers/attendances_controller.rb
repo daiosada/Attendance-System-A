@@ -38,6 +38,18 @@ class AttendancesController < ApplicationController
       attendances_params.each do |id, item|
         attendance = Attendance.find(id)
         unless item[:approver].blank?
+          # 時分がブランクのときは更新しないように年月日もブランクにする
+          if item["changed_started_at(4i)"].blank? || item["changed_started_at(5i)"].blank?
+            3.times do |n|
+              item["changed_started_at(#{n + 1}i)"] = ""
+            end
+          end
+          if item["changed_finished_at(4i)"].blank? || item["changed_finished_at(5i)"].blank?
+            3.times do |n|
+              item["changed_finished_at(#{n + 1}i)"] = ""
+            end
+          end
+          # next_dayがtrueの場合は日付を+1する
           item["changed_finished_at(3i)"] = (item["changed_finished_at(3i)"].to_i + 1).to_s if item[:next_day]
           if attendance.update_attributes!(item)
             attendance.update_attributes!(status: "申請中", checked: false, approved: false)

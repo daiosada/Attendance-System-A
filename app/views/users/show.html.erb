@@ -36,10 +36,12 @@
     </div>
   <% else %>
     <div>
-      <span>【所属長承認申請のお知らせ】</span>
-      <% if @one_month_attendance.approver == current_user.id && @one_month_attendance.status == "申請中" %>
+      <% if @one_month_attendance.approver == current_user.id && @one_month_attendance.status == "申請中" && @type == "one_month_attendance" %>
+        <span>【所属長承認申請のお知らせ】</span>
         <%= link_to "1ヶ月分勤怠申請の承認", one_month_attendances_show_one_month_attendance_user_path(@user, date: @first_day),
             remote: true, class: "btn btn-primary" %>
+      <% elsif @type == "" %>
+        <span>【所属長承認申請のお知らせ】</span>
       <% end %>
     </div>
   <% end %>
@@ -50,10 +52,12 @@
     </div>
   <% else %>
     <div>
-      <span>【勤怠変更申請のお知らせ】</span>
-      <% if @applied_attendance.approver == current_user.id && @applied_attendance.status == "申請中" %>
+      <% if @applied_attendance.approver == current_user.id && @applied_attendance.status == "申請中" && @type == "applied_attendance" %>
+        <span>【勤怠変更申請のお知らせ】</span>
         <%= link_to "勤怠変更の承認", attendances_confirm_applied_attendance_user_path(@user, date: @applied_attendance.worked_on),
             remote: true, class: "btn btn-primary" %>
+      <% elsif @type == "" %>
+        <span>【勤怠変更申請のお知らせ】</span>
       <% end %>
     </div>
   <% end %>
@@ -64,10 +68,12 @@
     </div>
   <% else %>
     <div>
-      <span>【残業申請のお知らせ】</span>
-      <% if @overtime.approver == current_user.id && @overtime.status == "申請中" %>
+      <% if @overtime.approver == current_user.id && @overtime.status == "申請中" && @type == "overtime" %>
+        <span>【残業申請のお知らせ】</span>
         <%= link_to "残業申請の承認", overtimes_confirm_overtime_user_path(@user, date: @overtime.worked_on),
             remote: true, class: "btn btn-primary" %>
+      <% elsif @type == "" %>
+        <span>【残業申請のお知らせ】</span>
       <% end %>
     </div>
   <% end %>
