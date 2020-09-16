@@ -28,6 +28,10 @@ class ApplicationController < ActionController::Base
     redirect_to root_url unless current_user.admin?
   end
   
+  def general_or_superior_user
+    redirect_to(root_url) if current_user.admin?
+  end
+  
   def admin_or_correct_user
     @user = User.find(params[:id]) if @user.blank?
     unless current_user?(@user) || current_user.admin?

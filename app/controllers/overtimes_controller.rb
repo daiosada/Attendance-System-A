@@ -4,6 +4,7 @@ class OvertimesController < ApplicationController
   before_action :set_overtime, only: [:show_overtime, :confirm_overtime]
   before_action :set_overtimes, only: [:show_overtimes, :confirm_overtime]
   before_action :set_statuses, only: [:show_overtime, :show_overtimes, :confirm_overtime]
+  before_action :general_or_superior_user
   
   def show_overtime
   end

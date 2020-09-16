@@ -4,6 +4,7 @@ class OneMonthAttendancesController < ApplicationController
   before_action :set_one_month_attendances, only: :show_one_month_attendances
   before_action :set_one_month_attendance, only: :show_one_month_attendance
   before_action :set_statuses, only: [:show_one_month_attendances, :show_one_month_attendance]
+  before_action :general_or_superior_user
   
   def update
     @user = User.find(params[:user_id])

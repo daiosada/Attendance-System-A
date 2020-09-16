@@ -8,6 +8,7 @@ class AttendancesController < ApplicationController
   before_action :set_statuses, only: [:show_applied_attendances, :confirm_applied_attendance]
   before_action :set_applied_attendance, only: :confirm_applied_attendance
   before_action :set_applied_attendances, only: :show_applied_attendances
+  before_action :general_or_superior_user
   
   UPDATE_ERROR_MSG = "勤怠登録に失敗しました。やり直してください。"
   

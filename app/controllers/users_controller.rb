@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy, :edit_basic_info, :update_basic_info]
   before_action :logged_in_user, only: [:index, :show, :edit, :update, :destroy, :edit_basic_info, :update_basic_info]
-  before_action :admin_user, only: [:index, :destroy, :edit_basic_info, :update_basic_info, :show_employees_at_work]
+  before_action :admin_user, only: [:index, :destroy, :import, :edit_basic_info, :update_basic_info, :show_employees_at_work]
   before_action :set_one_month, only: :show
   before_action :set_superiors, only: :show
   before_action :set_one_month_attendance, only: :show
@@ -12,6 +12,7 @@ class UsersController < ApplicationController
   before_action :set_applied_attendances, only: :show
   before_action :admin_or_correct_user_or_approver, only: [:show, :edit, :update]
   before_action :application_type, only: :show
+  before_action :general_or_superior_user, only: :show
   
   def index
     @users = User.paginate(page: params[:page]).search(params[:search])
@@ -88,7 +89,9 @@ class UsersController < ApplicationController
   private
   
     def user_params
-      params.require(:user).permit(:name, :email, :affiliation, :password, :password_confirmation)
+      params.require(:user).permit(:name, :email, :affiliation, :employee_number, :uid,
+                                   :password, :password_confirmation,
+                                   :basic_work_time, :designated_work_start_time, :designated_work_end_time)
     end
     
     def basic_info_params
