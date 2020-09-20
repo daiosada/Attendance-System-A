@@ -40,8 +40,11 @@ class AttendancesController < ApplicationController
         attendance = Attendance.find(id)
         if item[:approver].blank?
           unless attendance.approved?
-            if !item["changed_started_at(4i)"].blank? || !item["changed_started_at(5i)"].blank? || !item["changed_finished_at(4i)"].blank? || !item["changed_finished_at(5i)"].blank? || item[:next_day] == true || !item[:note].blank?
-              raise ActiveRecord::RecordInvalid
+            if (!item["changed_started_at(4i)"].blank? || !item["changed_started_at(5i)"].blank? \
+              || !item["changed_finished_at(4i)"].blank? || !item["changed_finished_at(5i)"].blank? \
+              || item[:next_day] == true || !item[:note].blank?) \
+              && attendance.started_at.blank?
+                raise ActiveRecord::RecordInvalid
             end
           end
         else
