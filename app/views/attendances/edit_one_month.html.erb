@@ -71,7 +71,11 @@
                 <% end %>
               </td>
               <td><%= attendance.text_field :note, class: "form-control" %></td>
-              <td><%= attendance.collection_select :approver, @superiors, :id, :name, { include_blank: true, selected: "" }, class: "form-control" %></td>
+              <% if attendance.status == "申請中" %>
+                <td><%= attendance.collection_select :approver, @superiors, :id, :name, { include_blank: true }, class: "form-control" %></td>
+              <% else %>
+                <td><%= attendance.collection_select :approver, @superiors, :id, :name, { include_blank: true, selected: "" }, class: "form-control" %></td>
+              <% end %>
             <% end %>
           </tr>
         <% end %>
