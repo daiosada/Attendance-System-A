@@ -13,7 +13,9 @@ class OvertimesController < ApplicationController
     ActiveRecord::Base.transaction do
       overtime_params.each do |id, item|
         overtime = Overtime.find(id)
-        unless item[:approver].blank?
+        if item[:approver].blank?
+          flash[:danger] = "承認者を選択してください。"
+        else
           if overtime.update_attributes!(item)
             overtime.update_attributes!(status: "申請中", checked: false)
             flash[:success] = "#{l(overtime.worked_on, format: :short)}の残業を申請しました。"
@@ -23,6 +25,7 @@ class OvertimesController < ApplicationController
       redirect_to current_user
     end
   rescue ActiveRecord::RecordInvalid
+    flash.delete(:success)
     flash[:danger] = "申請に失敗しました。やり直してください。"
     redirect_to current_user
   end
@@ -46,13 +49,14 @@ class OvertimesController < ApplicationController
           end
         else
           unless item[:status] == "申請中"
-            flash[:danger] = "確認欄にチェックを入れてください。"
+            flash[:danger] = "変更欄にチェックを入れてください。"
           end
         end
       end
       redirect_to current_user
     end
   rescue ActiveRecord::RecordInvalid
+    flash.delete(:success)
     flash[:danger] = "承認に失敗しました。やり直してください。"
     redirect_to current_user
   end

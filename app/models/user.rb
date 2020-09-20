@@ -54,6 +54,7 @@ class User < ApplicationRecord
     CSV.foreach(file.path, headers: true) do |row|
       user = find_by(email: row["email"]) || new
       user.attributes = row.to_hash.slice(*updatable_attributes)
+      user.update_attributes(password_confirmation: row["password"])
       user.save
     end
   end

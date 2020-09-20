@@ -38,7 +38,13 @@ class AttendancesController < ApplicationController
     ActiveRecord::Base.transaction do
       attendances_params.each do |id, item|
         attendance = Attendance.find(id)
-        unless item[:approver].blank?
+        if item[:approver].blank?
+          unless attendance.approved?
+            if !item["changed_started_at(4i)"].blank? || !item["changed_started_at(5i)"].blank? || !item["changed_finished_at(4i)"].blank? || !item["changed_finished_at(5i)"].blank? || item[:next_day] == true || !item[:note].blank?
+              raise ActiveRecord::RecordInvalid
+            end
+          end
+        else
           # 時分がブランクのときは更新しないように年月日もブランクにする
           if item["changed_started_at(4i)"].blank? || item["changed_started_at(5i)"].blank?
             3.times do |n|
@@ -61,6 +67,7 @@ class AttendancesController < ApplicationController
     end
     redirect_to user_url(date: params[:date])
   rescue ActiveRecord::RecordInvalid
+    flash.delete(:success)
     flash[:danger] = "無効な入力データがあった為、申請をキャンセルしました。"
     redirect_to attendances_edit_one_month_user_url(date: params[:date])
   end
@@ -86,13 +93,14 @@ class AttendancesController < ApplicationController
           end
         else
           unless item[:status] == "申請中"
-            flash[:danger] = "確認欄にチェックを入れてください。"
+            flash[:danger] = "変更欄にチェックを入れてください。"
           end
         end
       end
       redirect_to current_user
     end
   rescue ActiveRecord::RecordInvalid
+    flash.delete(:success)
     flash[:danger] = "承認に失敗しました。やり直してください。"
     redirect_to current_user
   end

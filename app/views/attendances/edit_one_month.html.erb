@@ -71,7 +71,7 @@
                 <% end %>
               </td>
               <td><%= attendance.text_field :note, class: "form-control" %></td>
-              <td><%= attendance.collection_select :approver, @superiors, :id, :name, { include_blank: true}, class: "form-control" %></td>
+              <td><%= attendance.collection_select :approver, @superiors, :id, :name, { include_blank: true, selected: "" }, class: "form-control" %></td>
             <% end %>
           </tr>
         <% end %>
